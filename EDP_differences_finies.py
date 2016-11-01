@@ -1,10 +1,11 @@
 import math
 import numpy as np
-import pandas as pd
 
-import scipy as sp
-from scipy import stats
-import matplotlib as plt
+'''
+See : https://github.com/CoryMagnuson/QUANT-TRAINING/blob/master/Explicit%20Finite%20Differences%20Method%20-%20Option%20Valuation.ipynb
+planetmath.org/solvingtheblackscholespdebyfinitedifferences
+https://www.quantopian.com/posts/python-black-and-scholes-pde-finite-difference-method
+'''
 
 T = 0.5  #Time to Expiry in Years
 E = 50  #Strike
@@ -29,10 +30,12 @@ if Call == True:
 else:
     value_matrix[:,-1]= np.maximum(E - asset_price,0)
     
-#Set Lower Boundry in Grid
+#Set Boundary in Grid
 for x in range(1,NTS):
     # the payoff discounted until time 0
     value_matrix[0,-x-1] = value_matrix[0,-x]* math.exp(-r*dt)
+    # Upper boundary:
+    value_matrix[-1,-x-1] = value_matrix[-1,-x]* math.exp(-r*dt)
 
 #Set Mid and upper Values in Grid
 for x in range(1,int(NTS)):
@@ -45,5 +48,4 @@ for x in range(1,int(NTS)):
         #Set Mid Values
         value_matrix[y,-x-1] = value_matrix[y,-x] - Theta * dt
           
-    # Upper boundary:
-    value_matrix[-1,-x-1] = 2 * value_matrix[-2,-x-1] - value_matrix[-3,-x-1]
+    
