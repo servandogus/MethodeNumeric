@@ -43,9 +43,8 @@ for x in range(1,int(NTS)):
         #Evaluate Option Greeks
         Delta = (value_matrix[y+1,-x] - value_matrix[y-1,-x]) / 2 / ds
         Gamma = (value_matrix[y+1,-x] - (2 * value_matrix[y,-x]) + value_matrix[y-1,-x]) / ds / ds
-        Theta = (-.5 * SIGMA**2 * asset_price[y]**2 * Gamma) - (r * asset_price[y] * Delta) + (r * value_matrix[y,-x])
         
         #Set Mid Values
-        value_matrix[y,-x-1] = value_matrix[y,-x] - Theta * dt
+        value_matrix[y,-x-1] = value_matrix[y,-x] + dt * (0.5 * SIGMA**2 * asset_price[y]**2 * Gamma) + dt * (r * asset_price[y] * Delta) - dt * (r * value_matrix[y,-x])
           
     
